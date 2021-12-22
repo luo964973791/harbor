@@ -32,3 +32,43 @@ harbor_admin_password: 12345     #修改二十七行改密码
 sh install.sh
 ```
 
+
+### 配置后端minio S3存储.
+```
+mc config host add minio http://172.27.0.6:9000 minio minio123
+mc mb minio/harbor harbor
+mc admin user add minio harbor minio123
+
+#编辑harbor.json
+vi harbor.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:ListBucketMultipartUploads"
+      ],
+      "Resource": "arn:aws:s3:::harbor"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject",
+        "s3:ListMultipartUploadParts",
+        "s3:AbortMultipartUpload"
+      ],
+      "Resource": "arn:aws:s3:::harbor/*"
+    }
+  ]
+}
+
+
+mc admin policy add minio harbor ./harbor.json
+mc admin policy set minio harbor user=harbor
+```
+
