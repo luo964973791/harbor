@@ -30,6 +30,26 @@ harbor_admin_password: 12345     #修改二十七行改密码
 
 ```
 sh install.sh
+#配置开机自启动
+cat <<EOF | sudo tee /etc/systemd/system/harbor.service 
+[Unit]
+Description=harbor
+After=docker.service systemd-networkd.service systemd-resolved.service
+Requires=docker.service
+Documentation=http://github.com/vmware/harbor
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+ExecStart=/usr/local/bin/docker-compose -f  /root/harbor/docker-compose.yml up
+ExecStop=/usr/local/bin/docker-compose -f  /root/harbor/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable harbor.service
 ```
 
 
