@@ -31,7 +31,7 @@ harbor_admin_password: 12345     #修改二十七行改密码
 ```
 sh install.sh
 #配置开机自启动
-crontab -l ; echo "@reboot sleep 60 && cd /root/harbor && /usr/local/bin/docker-compose up -d") | crontab -
+crontab -l ; echo "@reboot sleep 60 && cd /root/harbor && /usr/local/bin/docker-compose restart") | crontab -
 ```
 
 
