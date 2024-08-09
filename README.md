@@ -9,6 +9,7 @@ openssl req -newkey rsa:4096 -nodes -sha256 -keyout harbor.key -x509 -days 36500
 #注意这里的IP 上上面一步harbor 生成证书的IP,所有dockerk客户端的路径都必须一致，比如我的harbor服务器的IP是172.27.0.3，所有的服务器下面创建目录的IP都必须是harbor服务器的IP.
 mkdir -p /etc/docker/certs.d/172.27.0.3  && cd /etc/docker/certs.d/172.27.0.3 && cp /data/harbor.crt ./ca.crt
 systemctl daemon-reload && systemctl restart docker
+docker login https://172.27.0.3 -u admin -p Harbor12345
 wget https://github.com/goharbor/harbor/releases/download/v1.10.2/harbor-online-installer-v1.10.2.tgz
 ```
 
