@@ -7,6 +7,7 @@ pip install docker-compose
 openssl req -newkey rsa:4096 -nodes -sha256 -keyout harbor.key -x509 -days 36500 -out harbor.crt -subj "/CN=$(hostname -I | awk '{print $1}')" -addext "subjectAltName=IP:$(hostname -I | awk '{print $1}')"
 
 mkdir -p /etc/docker/certs.d/$(hostname -I | awk '{print $1}')   && cd /etc/docker/certs.d/$(hostname -I | awk '{print $1}') && cp /data/harbor.crt ./ca.crt
+systemctl daemon-reload && systemctl restart docker
 wget https://github.com/goharbor/harbor/releases/download/v1.10.2/harbor-online-installer-v1.10.2.tgz
 ```
 
