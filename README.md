@@ -1,8 +1,12 @@
-### 必须提前部署docker
+### 必须提前部署docker,并设置证书
 
 ```
-yum install gcc gcc-c++ make cmake python-pip -y && yum install -y python-devel
+yum install gcc gcc-c++ make cmake python3.11-pip openssl openssl-devel  -y && yum install -y python3.11-devel
 pip install docker-compose
+[ ! -d "/data" ] && mkdir /data; cd /data
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout harbor.key -x509 -days 36500 -out harbor.crt -subj "/CN=$(hostname -I | awk '{print $1}')" -addext "subjectAltName=IP:$(hostname -I | awk '{print $1}')"
+
+mkdir -p /etc/docker/certs.d/$(hostname -I | awk '{print $1}')   && cd /etc/docker/certs.d/$(hostname -I | awk '{print $1}') && cp /data/harbor.crt ./ca.crt
 wget https://github.com/goharbor/harbor/releases/download/v1.10.2/harbor-online-installer-v1.10.2.tgz
 ```
 
@@ -18,12 +22,12 @@ tar zxvf harbor-online-installer-v1.10.2.tgz && cd harbor
 hostname: 172.27.0.6  #修改第五行改成主机IP.
 port: 888  #修改第六行
 harbor_admin_password: 12345     #修改二十七行改密码
-#https: #关闭证书.
+https:
   # https port for harbor, default is 443
-  #port: 443
+  port: 443
   # The path of cert and key files for nginx
-  #certificate: /your/certificate/path
-  #private_key: /your/private/key/path
+  certificate: /data/harbor.crt
+  private_key: /data/harbor.key
 ```
 
 ### 启动。
