@@ -38,7 +38,7 @@ https:
 ```
 sh install.sh
 #配置开机自启动
-(crontab -l ; echo "@reboot sleep 60 && cd /root/harbor && /usr/local/bin/docker-compose restart") | crontab -
+(crontab -l | grep -q "@reboot sleep 15 && cd /root/harbor && /usr/local/bin/docker-compose restart" || (crontab -l ; echo "@reboot sleep 15 && cd /root/harbor && /usr/local/bin/docker-compose restart") | crontab -)
 ```
 
 
