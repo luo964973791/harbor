@@ -63,3 +63,6 @@ metrics:
 #{
 #    "insecure-registries": ["172.27.0.3:30002"]
 #}
+
+#如果忘记密码可以通过以下命令查看.
+#echo $(cat /root/.docker/config.json | grep "auth" |awk 'NR==2{print $2}'| cut -d '"' -f2) | base64 -d
