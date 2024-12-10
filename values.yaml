@@ -1,3 +1,4 @@
+# helm install harbor -n kube-system -f ./values.yaml harbor/harbor
 expose:
   type: nodePort   
   tls:
@@ -55,3 +56,10 @@ metrics:
   exporter:
     path: /metrics
     port: 8001
+
+
+
+#[root@node1 ~]# cat /etc/docker/daemon.json 
+#{
+#    "insecure-registries": ["172.27.0.3:30002"]
+#}
